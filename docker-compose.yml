@@ -3,10 +3,11 @@
 # of the frontend service container to port 80 
 # of the host as specified in the file.
 services:
-  boilerplate:
+  web:
     image: nginx:alpine
     container_name: frontend
-    build:
-      context: .
     ports:
       - "80:80"
+    build:
+      context: .
+    
