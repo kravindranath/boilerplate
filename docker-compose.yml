@@ -7,7 +7,7 @@ services:
     image: nginx:alpine
     container_name: frontend
     ports:
-      - "80:80"
+      - "9000:80"
     build:
       context: .
     
