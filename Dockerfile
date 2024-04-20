@@ -2,7 +2,7 @@
 
 # Use the official Node.js runtime as the base image
 # 1. For build React app
-FROM nginx:alpine AS development
+FROM node:lts AS development
 
 # Set working directory
 WORKDIR /app
