@@ -52,6 +52,8 @@ FROM nginx:alpine
 # Copy config nginx
 COPY --from=build /app/src/config/nginx/default.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 80
+
 WORKDIR /usr/share/nginx/html
 
 # Remove default nginx static assets
