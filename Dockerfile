@@ -19,8 +19,14 @@ RUN npm run build
 # Use NGINX image as the final base image
 FROM nginx:alpine
 
+# Copy custom NGINX configuration file with Cache-Control header
+COPY nginx.conf /etc/nginx/nginx.conf
+
 # Copy the built files from the previous stage to NGINX's default HTML directory
 COPY --from=builder /app/build /usr/share/nginx/html
+
+# Copy config nginx
+# COPY --from=builder /app/src/config/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
