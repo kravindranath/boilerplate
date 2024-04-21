@@ -1,72 +1,29 @@
-# syntax=docker/dockerfile:1
+# Use the official Node.js image as base
+FROM node:lts AS builder
 
-# Use the official Node.js runtime as the base image
-# 1. For build React app
-FROM node:lts AS development
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy package files
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# Copy package.json and package-lock.json files to the working directory
+COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
-# Copy application folder
-COPY . /app
+# Copy the rest of the application code to the working directory
+COPY . .
 
-# Set port and CI variables
-ENV CI=true
-ENV PORT=3000
-
-# Start the react application
-CMD [ "npm", "start" ]
-
-# Get ser
-FROM development AS build
-
-# Build the React app for production
+# Run the build command
 RUN npm run build
 
-# Install git in the docker container
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
+# Use NGINX image as the final base image
+FROM nginx:alpine
 
-#RUN <<EOF
-#useradd -s /bin/bash -m vscode
-#groupadd docker
-#usermod -aG docker vscode
-#EOF
+# Copy the built files from the previous stage to NGINX's default HTML directory
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
-
-# 2. For Nginx setup
-FROM nginx
-
-# Copy config nginx
-COPY --from=build /app/src/config/nginx/default.conf /etc/nginx/conf.d/default.conf
-
+# Expose port 80
 EXPOSE 80
 
-WORKDIR /usr/share/nginx/html
-
-# Remove default nginx static assets
-RUN rm -rf ./*
-
-# Copy static assets from builder stage
-COPY --from=build /app/build .
-
-# Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
-
-
-
-
+# Command to run NGINX
+CMD ["nginx", "-g", "daemon off;"]
