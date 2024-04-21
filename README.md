@@ -19,7 +19,7 @@ Launches the test runner in the interactive watch mode.\
 
 Builds the app for production to the `build` folder.\
 
-### `docker compose up --build -d` and `docker run -d -p 80:80 boilerplate-boilerplate`
+### `docker compose up --build -d`
 
 Builds the app using docker.\
 After the application start, navigate to http://localhost in your browser:
