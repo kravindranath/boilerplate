@@ -37,17 +37,18 @@ apt-get update
 apt-get install -y --no-install-recommends git
 EOF
 
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
+#RUN <<EOF
+#useradd -s /bin/bash -m vscode
+#groupadd docker
+#usermod -aG docker vscode
+#EOF
+
 # install Docker tools (cli, buildx, compose)
 COPY --from=gloursdocker/docker / /
 CMD [ "npm", "start" ]
 
 # 2. For Nginx setup
-FROM nginx:alpine
+FROM nginx
 
 # Copy config nginx
 COPY --from=build /app/src/config/nginx/default.conf /etc/nginx/conf.d/default.conf

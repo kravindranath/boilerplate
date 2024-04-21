@@ -1,13 +1,12 @@
 # The compose file defines an application with an services frontend.
-# When deploying the application, docker compose maps port 80 
+# When deploying the application, docker compose maps port 3000 
 # of the frontend service container to port 80 
 # of the host as specified in the file.
 services:
   web:
-    image: nginx:alpine
-    container_name: frontend
+    image: nginx
     ports:
-      - "9000:80"
+      - "3000:80"
     build:
       context: .
     
